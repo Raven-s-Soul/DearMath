@@ -1,4 +1,5 @@
 #include "project.h"
+#include "console.h"
 #include <stdio.h>
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -52,11 +53,11 @@ int main()
 #endif
 
     // Create window with graphics context
-    GLFWwindow *window = glfwCreateWindow(1280, 720, "Project", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(1280, 720, "DearMath", nullptr, nullptr);
     if (window == nullptr)
         return 1;
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // Enable vsyn
+    glfwSwapInterval(0); // Enable vsyn
 
     project gui(ImVec4(0.45f, 0.55f, 0.60f, 1.00f));
     gui.Init(window, glsl_version);
@@ -68,8 +69,33 @@ int main()
     io.IniFilename = nullptr;
     EMSCRIPTEN_MAINLOOP_BEGIN
 #else
+
+    //* FPS Lock variables
+    auto last_time = std::chrono::steady_clock::now();
+    const int target_fps = 60;
+    const double target_frame_duration = 1.0 / target_fps;
+
     while (!glfwWindowShouldClose(window))
     {
+        //* FPS Lock
+        // Calculate elapsed time
+        auto now = std::chrono::steady_clock::now();
+        std::chrono::duration<double> elapsed = now - last_time;
+
+        // Wait until target frame duration is reached
+        while (elapsed.count() < target_frame_duration)
+        {
+            // Busy wait or yield to allow other threads to run
+            std::this_thread::yield();
+
+            // Recalculate elapsed time
+            now = std::chrono::steady_clock::now();
+            elapsed = now - last_time;
+        }
+
+        // Update last_time for next frame
+        last_time = now;
+
 #endif
     glfwPollEvents();
     gui.newFrame();
@@ -137,6 +163,11 @@ void project::Update()
     // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
     if (show_demo_window)
         ImGui::ShowDemoWindow(&show_demo_window);
+
+    if (true)
+    {
+        Console::console();
+    }
 
     // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
     {

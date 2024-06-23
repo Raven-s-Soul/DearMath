@@ -2,6 +2,10 @@
 add_executable(${PROJECT_NAME}
     project.cpp
     project.h
+    components.cpp
+    components.h
+    console.cpp
+    console.h
 )
 
 # ! Platform-specific configuration

@@ -140,3 +140,6 @@ modules/imgui/misc/fonts/*
 #App Name:
 build/*
 imgui.ini
+imgui_log.txt
+ConsoleLog.txt
+.vscode/settings.json
