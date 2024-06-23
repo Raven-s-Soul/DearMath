@@ -4,57 +4,28 @@
 //* Logger
 //
 
-static ImGuiInputTextFlags logflags = ImGuiInputTextFlags_ReadOnly | ImGuiInputTextFlags_AllowTabInput;
-
 void logger()
 {
-    ImGui::InputTextMultiline("Logger", Console::logs, IM_ARRAYSIZE(Console::logs), ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 16), logflags);
-
-    if (ImGui::Button("Copy to clipboard"))
-    {
-        ImGui::LogToClipboard();
-        ImGui::LogText(Console::logs);
-        ImGui::LogFinish();
-    }
-
-    ImGui::SameLine();
-    if (ImGui::Button("Log to file"))
-    {
-        ImGui::LogToFile(-1, LogFileName);
-        ImGui::LogText(Console::logs);
-        ImGui::LogFinish();
-    }
-
-    ImGui::SameLine();
-    if (ImGui::Button("Clear file logs"))
-    {
-        delete_file(LogFileName);
-    }
-}
-
-void log_message(const char *message)
-{
-    std::string result(message);
-    result += " \n";
-    // Safely append the message to logs
-    strncat(Console::logs, result.c_str(), LOG_SIZE - strlen(Console::logs) - 1);
+    // static ImGuiInputTextFlags logflags = ImGuiInputTextFlags_ReadOnly | ImGuiInputTextFlags_AllowTabInput;
+    // ImGui::InputTextMultiline("Logger", Console::logs, IM_ARRAYSIZE(Console::logs), ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 16), logflags);
 }
 
 //
 //* Console
 //
 
-void commandEnter()
+void Console::commandEnter()
 {
     //? Invio e finestra focussed
 
     //* Log to File
     {
         ImGui::LogToFile(-1, LogFileName);
-        ImGui::LogText(Console::text);
+        ImGui::LogText(text);
         ImGui::LogFinish();
     }
-    log_message(Console::text);
+
+    logger.log_message(text);
 
     //! Analisi
     /*
@@ -64,22 +35,59 @@ void commandEnter()
     */
 
     //? Clear input after logging
-    Console::text[0] = '\0';
+    text[0] = '\0';
     ImGui::SetKeyboardFocusHere();
 }
 
-void Console::console()
+void Console::draw(bool &isLoggerOn)
 {
-    ImGui::Begin("Console");
+    static bool log = true;
 
-    logger();
+    ImGui::Begin("Console");
+    // logger();
+    if (log && isLoggerOn)
+    {
+        logger.draw(&log);
+    }
+
+    //*
+    //* Buttons
+    //*
+
+    if (ImGui::Button("Copy to clipboard"))
+    {
+        logger.Copy_to_clipboard();
+    }
+
+    ImGui::SameLine();
+    if (ImGui::Button("Log to file"))
+    {
+        logger.LogToFile();
+    }
+
+    ImGui::SameLine();
+    if (ImGui::Button("Clear file logs"))
+    {
+        delete_file(LogFileName);
+    }
+
+    ImGui::SameLine();
+    ImGui::Checkbox("Show Log", &log);
+
+    //*
+    //* Logic
+    //*
 
     if (ImGui::IsWindowFocused() && ((ImGui::IsKeyReleased(ImGuiKey_Enter) || ImGui::IsKeyReleased(ImGuiKey_KeypadEnter))))
     {
         commandEnter();
     }
 
-    ImGui::InputTextWithHint("Console", "...", Console::text, IM_ARRAYSIZE(Console::text));
+    //*
+    //* Input
+    //*
+
+    ImGui::InputTextWithHint("Console", "...", text, IM_ARRAYSIZE(text));
     ImGui::SameLine();
     HelpMarker(
         "USER:\n"

@@ -6,6 +6,8 @@ add_executable(${PROJECT_NAME}
     components.h
     console.cpp
     console.h
+    logger.cpp
+    logger.h
 )
 
 # ! Platform-specific configuration

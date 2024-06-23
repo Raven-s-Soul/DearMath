@@ -2,17 +2,31 @@
 
 #include "imgui.h"
 #include "components.h"
+#include "logger.h"
 #include <string>
 
-#define LogFileName "ConsoleLog.txt"
-#define LOG_SIZE 2048
 #define ANSWERS "-> "
 
-namespace Console
+// static char logs[LOG_SIZE] = "";
+static char text[256] = "";
+
+class Console
 {
-    static char logs[LOG_SIZE] = "";
-    static char text[128] = "";
+public:
+    Console()
+    {
+        logger = Logger();
+    }
 
-    void console();
+    void draw(bool &isLoggerOn);
 
-}
+    Logger getLogger()
+    {
+        return logger;
+    }
+
+private:
+    Logger logger;
+
+    void commandEnter();
+};

@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h> // Will drag system OpenGL headers
 #include <chrono>
 #include <thread>
+#include "console.h"
 
 class project
 {
@@ -14,6 +15,7 @@ private:
     ImVec4 clear_color;
     bool show_demo_window = true;
     bool show_another_window = false;
+    Console console;
 
 public:
     void Init(GLFWwindow *window, const char *glsl_version);

@@ -77,6 +77,7 @@ int main()
 
     while (!glfwWindowShouldClose(window))
     {
+
         //* FPS Lock
         // Calculate elapsed time
         auto now = std::chrono::steady_clock::now();
@@ -160,14 +161,27 @@ void project::Init(GLFWwindow *window, const char *glsl_version)
 
 void project::Update()
 {
+    ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+
+    static bool isConsoleOn = true;
+    static bool isLoggerOn = true;
+    static bool isAboutOn = false;
+
+    MenuBar(isConsoleOn, isLoggerOn, isAboutOn);
+
+    if (isAboutOn)
+    {
+        About(isAboutOn);
+    }
+
+    if (isConsoleOn)
+    {
+        console.draw(isLoggerOn);
+    }
+
     // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
     if (show_demo_window)
         ImGui::ShowDemoWindow(&show_demo_window);
-
-    if (true)
-    {
-        Console::console();
-    }
 
     // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
     {
