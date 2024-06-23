@@ -1,5 +1,5 @@
-# CustomDearImgui
-[![Build Status](https://github.com/Raven-s-Soul/CustomDearImgui/actions/workflows/main.yaml/badge.svg)](https://github.com/Raven-s-Soul/CustomDearImgui/actions?workflow=Build)
+# DearMath
+[![Build Status](https://github.com/Raven-s-Soul/DearMath/actions/workflows/main.yaml/badge.svg)](https://github.com/Raven-s-Soul/DearMath/actions?workflow=Build)
 
 ### Features:
 •  [Multi-Viewports](https://github.com/ocornut/imgui/wiki/Multi-Viewports)
