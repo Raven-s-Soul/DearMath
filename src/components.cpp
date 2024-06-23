@@ -7,7 +7,11 @@
 
 void OpenURL(const char *url)
 {
-#ifdef _WIN32
+#ifdef __APPLE__
+    std::string command = "open ";
+    command += url;
+    std::system(command.c_str());
+#elif _WIN32
     ShellExecuteA(NULL, "open", url, NULL, NULL, SW_SHOWNORMAL);
 #else
     std::string command = "xdg-open ";
