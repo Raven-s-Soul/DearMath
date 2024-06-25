@@ -6,9 +6,12 @@
 #include <string>
 
 #define ANSWERS "-> "
+#define TextSize 256
 
 // static char logs[LOG_SIZE] = "";
-static char text[256] = "";
+static char text[TextSize] = "";
+
+// static int TextEditCallbackStub(ImGuiInputTextCallbackData *data);
 
 class Console
 {
@@ -25,8 +28,13 @@ public:
         return logger;
     }
 
+    int TextEditCallback(ImGuiInputTextCallbackData *data);
+
 private:
     Logger logger;
+
+    // ImVector<char *> History;
+    // int HistoryPos = -1; // -1: new line, 0..History.Size-1 browsing history.
 
     void commandEnter();
 };

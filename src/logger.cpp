@@ -8,7 +8,7 @@ void Logger::draw(bool *p_open)
         ImGui::End();
         return;
     }
-
+    MenuLogger();
     ImGui::Text("System: ");
 
     // ImGui::Separator();
@@ -48,4 +48,33 @@ void Logger::Copy_to_clipboard()
     ImGui::LogToClipboard();
     ImGui::LogText(str.c_str());
     ImGui::LogFinish();
+}
+
+void Logger::MenuLogger()
+{
+    if (ImGui::BeginMenuBar())
+    {
+        if (ImGui::BeginMenu("Logger Options"))
+        {
+            if (ImGui::MenuItem("Copy to clipboard", NULL))
+            {
+                Copy_to_clipboard();
+            }
+            if (ImGui::MenuItem("Log to file", NULL))
+            {
+                LogToFile();
+            }
+            if (ImGui::MenuItem("Clear file logs", NULL))
+            {
+                delete_file(LogFileName);
+            }
+            if (ImGui::MenuItem("Clear logs", NULL))
+            {
+                clearLogs();
+            }
+
+            ImGui::EndMenu();
+        }
+        ImGui::EndMenuBar();
+    }
 }

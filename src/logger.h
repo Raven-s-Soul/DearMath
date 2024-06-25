@@ -24,8 +24,15 @@ public:
         logMessages.push_back(LogMessage(getCurrentDateTime() + "\n", ImVec4(1.0f, 0.0f, 0.0f, 1.0f)));
     }
 
-    void log(const std::string &message, const ImVec4 &color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f))
+    ~Logger()
     {
+        clearLogs();
+        // Hystory.clear();
+    }
+
+    void log(std::string &message, const ImVec4 &color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f))
+    {
+        // Hystory.push_back(message);
         logMessages.push_back(LogMessage(message, color));
         scrollToBottom = true;
     }
@@ -39,7 +46,6 @@ public:
         // strncat(logs, result.c_str(), LOG_SIZE - strlen(logs) - 1);
     }
 
-    // TODO to add
     void clearLogs()
     {
         logMessages.clear();
@@ -53,6 +59,42 @@ public:
 
     bool scrollToBottom;
 
+    // void HystoryClear()
+    // {
+    //     Hystory.clear();
+    // }
+
+    // const char *getHystory()
+    // {
+    //     if (HystoryScroll <= 0 || Hystory.empty() || Hystory.size() < HystoryScroll)
+    //         return "";
+    //     // LOG((Hystory.at(Hystory.size() - HystoryScroll) + "\0"))
+    //     // return Hystory.at(Hystory.size() - HystoryScroll).c_str();
+    //     return Hystory[Hystory.size() - HystoryScroll].c_str();
+    // }
+
+    // void incHystory()
+    // {
+    //     if (Hystory.size() > HystoryScroll)
+    //         HystoryScroll++;
+    //     // LOG(HystoryScroll)
+    // }
+
+    // void decHystory()
+    // {
+    //     if (HystoryScroll <= 0)
+    //         return;
+    //     HystoryScroll--;
+    //     // LOG(HystoryScroll)
+    // }
+
 private:
     std::vector<LogMessage> logMessages;
+    // std::vector<std::string> Hystory;
+    // int HystoryScroll = 0;
+    //  TODO ImVector<char *> Items;
+    //  TODO ImVector<const char *> Commands;
+    //  ImVector<std::string> Hystory;
+
+    void MenuLogger();
 };

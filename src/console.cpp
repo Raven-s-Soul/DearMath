@@ -1,16 +1,6 @@
 #include "console.h"
 
 //
-//* Logger
-//
-
-void logger()
-{
-    // static ImGuiInputTextFlags logflags = ImGuiInputTextFlags_ReadOnly | ImGuiInputTextFlags_AllowTabInput;
-    // ImGui::InputTextMultiline("Logger", Console::logs, IM_ARRAYSIZE(Console::logs), ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 16), logflags);
-}
-
-//
 //* Console
 //
 
@@ -26,6 +16,7 @@ void Console::commandEnter()
     }
 
     logger.log_message(text);
+    // History.push_back(text);
 
     //! Analisi
     /*
@@ -44,50 +35,39 @@ void Console::draw(bool &isLoggerOn)
     static bool log = true;
 
     ImGui::Begin("Console");
-    // logger();
+
     if (log && isLoggerOn)
     {
         logger.draw(&log);
     }
 
-    //*
-    //* Buttons
-    //*
-
-    if (ImGui::Button("Copy to clipboard"))
-    {
-        logger.Copy_to_clipboard();
-    }
-
-    ImGui::SameLine();
-    if (ImGui::Button("Log to file"))
-    {
-        logger.LogToFile();
-    }
-
-    ImGui::SameLine();
-    if (ImGui::Button("Clear file logs"))
-    {
-        delete_file(LogFileName);
-    }
-
-    ImGui::SameLine();
-    ImGui::Checkbox("Show Log", &log);
+    // ImGui::SameLine();
+    // ImGui::Checkbox("Show Log", &log);
 
     //*
     //* Logic
     //*
 
-    if (ImGui::IsWindowFocused() && ((ImGui::IsKeyReleased(ImGuiKey_Enter) || ImGui::IsKeyReleased(ImGuiKey_KeypadEnter))))
+    if (ImGui::IsWindowFocused())
     {
-        commandEnter();
+        if ((ImGui::IsKeyReleased(ImGuiKey_Enter) || ImGui::IsKeyReleased(ImGuiKey_KeypadEnter)))
+            commandEnter();
+        /*
+        if (ImGui::IsKeyReleased(ImGuiKey_UpArrow))
+        {
+        }
+
+        if (ImGui::IsKeyReleased(ImGuiKey_DownArrow))
+        {
+        }
+        */
     }
 
     //*
     //* Input
     //*
 
-    ImGui::InputTextWithHint("Console", "...", text, IM_ARRAYSIZE(text));
+    ImGui::InputTextWithHint("Console", "...", text, IM_ARRAYSIZE(text)); // ImGuiInputTextFlags_CallbackHistory | ImGuiInputTextFlags_CallbackCompletion
     ImGui::SameLine();
     HelpMarker(
         "USER:\n"
