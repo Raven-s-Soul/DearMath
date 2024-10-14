@@ -56,6 +56,13 @@ int main()
     GLFWwindow *window = glfwCreateWindow(1280, 720, "DearMath", nullptr, nullptr);
     if (window == nullptr)
         return 1;
+
+    // Set the GLFW key and mouse position callbacks
+    glfwSetKeyCallback(window, keyCallback);
+    glfwSetCursorPosCallback(window, mouseCallback);
+    // Set mouse button callback
+    glfwSetMouseButtonCallback(window, mouseButtonCallback);
+
     glfwMakeContextCurrent(window);
     glfwSwapInterval(0); // Enable vsyn
 
@@ -98,10 +105,15 @@ int main()
         last_time = now;
 
 #endif
+
     glfwPollEvents();
-    gui.newFrame();
-    gui.Update();
-    gui.Render(window);
+    if (framesToRender > 0)
+    {
+        gui.newFrame();
+        gui.Update();
+        gui.Render(window);
+        framesToRender--;
+    }
 }
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_MAINLOOP_END;
@@ -238,7 +250,7 @@ void project::Render(GLFWwindow *window)
         ImGui::RenderPlatformWindowsDefault();
         glfwMakeContextCurrent(backup_current_context);
     }
-
+    //? Attention Here
     glfwSwapBuffers(window);
 }
 
@@ -259,4 +271,29 @@ void project::newFrame()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+}
+
+// Key callback for GLFW
+void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
+{
+    // Check for key presses
+    if (action == GLFW_PRESS || action == GLFW_REPEAT)
+    {
+        framesToRender = FramesNext; // Set flag to true on key press
+    }
+}
+
+// Mouse callback for GLFW
+void mouseCallback(GLFWwindow *window, double xpos, double ypos)
+{
+    framesToRender = FramesNext; // Set flag to true on mouse movement
+}
+
+// Mouse button callback for GLFW
+void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods)
+{
+    if (action == GLFW_PRESS)
+    {
+        framesToRender = FramesNext; // Set to render for the next 10 frames on mouse click
+    }
 }

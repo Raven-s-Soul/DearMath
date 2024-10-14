@@ -8,6 +8,19 @@
 #include <thread>
 #include "console.h"
 
+// Global variable to track whether rendering should occur
+#define FramesNext 10 // 1/6 s
+int framesToRender = FramesNext;
+
+// Key callback for GLFW
+void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
+
+// Mouse callback for GLFW
+void mouseCallback(GLFWwindow *window, double xpos, double ypos);
+
+// Mouse button callback for GLFW
+void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods);
+
 class project
 {
 private:
